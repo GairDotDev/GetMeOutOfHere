@@ -128,8 +128,11 @@ class AutoApplier:
         print(f"  Company: {job.get('company')}")
         print(f"  Location: {job.get('location')}")
         print(f"  Score: {score}/10")
-        print(f"  Resume: {resume_path}")
-        print(f"  Cover Letter: {cover_letter_path or 'None'}")
+        # Only show filename, not full path for security
+        resume_name = os.path.basename(resume_path) if resume_path else 'None'
+        cover_letter_name = os.path.basename(cover_letter_path) if cover_letter_path else 'None'
+        print(f"  Resume: {resume_name}")
+        print(f"  Cover Letter: {cover_letter_name}")
         print(f"  URL: {job_url}")
         
         if not self.dry_run:
