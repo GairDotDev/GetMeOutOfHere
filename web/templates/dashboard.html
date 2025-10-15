@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - GetMeOutOfHere{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Jobs</h3>
+            <p class="stat-number">{{ stats.total_jobs }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Applications</h3>
+            <p class="stat-number">{{ stats.total_applications }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Applications Today</h3>
+            <p class="stat-number">{{ stats.applications_today }}</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>High-Scoring Jobs</h2>
+        {% if stats.high_score_jobs %}
+        <table class="jobs-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Score</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in stats.high_score_jobs %}
+                <tr>
+                    <td>{{ job.job_title }}</td>
+                    <td>{{ job.company }}</td>
+                    <td>{{ job.location }}</td>
+                    <td>{{ "%.1f"|format(job.score) if job.score else 'N/A' }}/10</td>
+                    <td>
+                        <a href="/jobs/{{ job.id }}" class="btn btn-small">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No high-scoring jobs yet. Configure your preferences and start scraping!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

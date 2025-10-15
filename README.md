@@ -1,6 +1,6 @@
 # Get Me Out Of Here
 
-An automated Python-based job searching tool that scrapes job postings, scores them using a weighted algorithm, and automatically applies if the score exceeds 8.5/10.
+An automated job application system with a web interface built with FastAPI. Scrapes job postings, scores them using a weighted algorithm, and manages applications through an intuitive dashboard.
 
 ## Features
 
@@ -31,19 +31,14 @@ cd GetMeOutOfHere
 pip install -r requirements.txt
 ```
 
-3. Set up your configuration:
+3. (Optional) Set up your configuration:
 ```bash
 cp config.example.yaml config.yaml
 ```
 
-4. Edit `config.yaml` with your preferences, scoring weights, and search parameters.
+4. Edit `config.yaml` with your preferences, or use the web interface to configure settings.
 
-5. Create directories for your documents:
-```bash
-mkdir -p resumes cover_letters
-```
-
-6. Add your resumes and cover letters to the respective directories.
+5. Add your resumes to the `resumes/` directory.
 
 ## Configuration
 
@@ -86,28 +81,31 @@ application:
 
 ## Usage
 
-Run the job application bot:
+### Web Interface (Recommended)
+
+Run the FastAPI web application:
 
 ```bash
-cd src
 python main.py
 ```
 
-### Dry Run Mode
+Then open your browser to `http://localhost:8000`
 
-To test without actually applying:
+The web interface provides:
+- **Dashboard**: Overview of jobs and applications with statistics
+- **Jobs**: Browse all scraped job listings with scores
+- **Applications**: Track your submitted applications
+- **Settings**: Configure preferences, thresholds, and application settings
 
-1. Set `dry_run: true` in `config.yaml`
-2. Run the bot to see what jobs would be applied to
+### Features
 
-### Output
-
-The bot will:
-1. Scrape job postings from configured job boards
-2. Score each job based on your preferences
-3. Display all jobs with their scores
-4. Automatically apply to jobs scoring above threshold
-5. Track applications in `applied_jobs.json`
+- 📊 **Dashboard** with real-time statistics
+- 🔍 **Job Listings** with scoring and filtering
+- 📝 **Application Tracking** with status updates
+- ⚙️ **Settings Management** through web UI
+- 🗄️ **SQLite Database** for persistent storage
+- ⏰ **Background Jobs** with APScheduler for automated scraping
+- 🎨 **Responsive Design** with Jinja2 templates
 
 ## Document Selection
 
@@ -146,20 +144,36 @@ Jobs scoring above **8.5/10** will be automatically applied to (configurable).
 
 ```
 GetMeOutOfHere/
-├── src/
-│   ├── __init__.py
-│   ├── main.py              # Main application entry point
-│   ├── config_loader.py     # Configuration management
-│   ├── job_scraper.py       # Job scraping logic
-│   ├── job_scorer.py        # Job scoring algorithm
-│   ├── document_selector.py # Resume/cover letter selection
-│   └── auto_applier.py      # Auto-application logic
+├── core/                    # Core application modules
+│   ├── config.py            # Configuration management
+│   └── database.py          # SQLModel database models
+├── services/                # Business logic services
+│   ├── job_service.py       # Job management service
+│   └── scraper_service.py   # Job scraping service
+├── jobs/                    # Background job scheduling
+│   ├── scheduler.py         # APScheduler setup
+│   └── tasks.py             # Background task definitions
+├── web/                     # Web interface
+│   ├── app.py               # FastAPI application
+│   ├── routes/              # API routes
+│   │   ├── dashboard.py     # Dashboard routes
+│   │   ├── jobs.py          # Job routes
+│   │   └── settings.py      # Settings routes
+│   ├── templates/           # Jinja2 templates
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   ├── jobs.html
+│   │   ├── applications.html
+│   │   ├── job_detail.html
+│   │   └── settings.html
+│   └── static/              # CSS, JS, images
+│       └── style.css
 ├── resumes/                 # Your resume files
-├── cover_letters/           # Your cover letter files
-├── config.yaml              # Your configuration (create from example)
+├── src/                     # Legacy CLI code (deprecated)
+├── main.py                  # Application entry point
+├── config.yaml              # Your configuration (optional)
 ├── config.example.yaml      # Example configuration
 ├── requirements.txt         # Python dependencies
-├── applied_jobs.json        # Tracking file (auto-generated)
 └── README.md
 ```
 

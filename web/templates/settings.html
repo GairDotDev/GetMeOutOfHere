@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - GetMeOutOfHere{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <h1>Settings</h1>
+    
+    <form method="post" action="/settings/update" class="settings-form">
+        <div class="form-section">
+            <h2>Application Settings</h2>
+            
+            <div class="form-group">
+                <label for="score_threshold">Score Threshold (0-10):</label>
+                <input type="number" 
+                       id="score_threshold" 
+                       name="score_threshold" 
+                       step="0.1" 
+                       min="0" 
+                       max="10"
+                       value="{{ settings.score_threshold }}" 
+                       required>
+                <small>Jobs scoring above this threshold will be auto-applied</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="max_applications_per_day">Max Applications Per Day:</label>
+                <input type="number" 
+                       id="max_applications_per_day" 
+                       name="max_applications_per_day" 
+                       min="1" 
+                       max="100"
+                       value="{{ settings.application.max_applications_per_day }}" 
+                       required>
+            </div>
+            
+            <div class="form-group checkbox">
+                <input type="checkbox" 
+                       id="auto_apply" 
+                       name="auto_apply" 
+                       {{ 'checked' if settings.application.auto_apply else '' }}>
+                <label for="auto_apply">Enable Auto-Apply</label>
+            </div>
+            
+            <div class="form-group checkbox">
+                <input type="checkbox" 
+                       id="dry_run" 
+                       name="dry_run" 
+                       {{ 'checked' if settings.application.dry_run else '' }}>
+                <label for="dry_run">Dry Run Mode (test without actually applying)</label>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+    </form>
+    
+    <div class="form-section">
+        <h2>Current Configuration</h2>
+        <pre class="config-preview">{{ settings | tojson(indent=2) }}</pre>
+    </div>
+</div>
+{% endblock %}
