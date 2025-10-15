@@ -1,0 +1,69 @@
+# Configuration file for GetMeOutOfHere Job Scraper
+
+# Scoring threshold for auto-apply (jobs with score > threshold will be auto-applied)
+score_threshold: 8.5
+
+# Job search parameters
+job_search:
+  keywords:
+    - "software engineer"
+    - "python developer"
+  locations:
+    - "Remote"
+    - "San Francisco, CA"
+  job_boards:
+    - "indeed"
+    - "linkedin"
+
+# Scoring weights (must sum to 1.0)
+scoring_weights:
+  keyword_match: 0.25      # How well job description matches your skills
+  salary_match: 0.20       # Salary alignment with expectations
+  location_preference: 0.15 # Location preference score
+  company_rating: 0.15     # Company rating/reputation
+  role_seniority: 0.15     # Role level match (junior/mid/senior)
+  benefits: 0.10           # Benefits and perks score
+
+# Your preferences
+preferences:
+  min_salary: 80000
+  max_salary: 200000
+  target_salary: 120000
+  preferred_locations:
+    - "Remote"
+  required_skills:
+    - "Python"
+    - "Django"
+    - "REST API"
+  nice_to_have_skills:
+    - "Docker"
+    - "Kubernetes"
+    - "AWS"
+  experience_level: "mid"  # junior, mid, senior
+
+# Resume and cover letter paths
+documents:
+  resumes_dir: "./resumes"
+  cover_letters_dir: "./cover_letters"
+  default_resume: "resume_general.pdf"
+  resume_mapping:
+    backend: "resume_backend.pdf"
+    frontend: "resume_frontend.pdf"
+    fullstack: "resume_fullstack.pdf"
+    data_science: "resume_datascience.pdf"
+  cover_letter_mapping:
+    startup: "cover_letter_startup.pdf"
+    enterprise: "cover_letter_enterprise.pdf"
+    generic: "cover_letter_generic.pdf"
+
+# Application settings
+application:
+  auto_apply: true
+  dry_run: false           # If true, shows what would be applied but doesn't actually apply
+  max_applications_per_day: 10
+  applied_jobs_file: "./applied_jobs.json"
+
+# Rate limiting
+rate_limiting:
+  delay_between_scrapes: 5  # seconds
+  delay_between_applications: 30  # seconds
