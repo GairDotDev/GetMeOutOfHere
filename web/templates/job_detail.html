@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.job_title if job else 'Job Not Found' }} - GetMeOutOfHere{% endblock %}
+
+{% block content %}
+<div class="job-detail">
+    {% if job %}
+    <h1>{{ job.job_title }}</h1>
+    
+    <div class="job-info">
+        <div class="info-item">
+            <strong>Company:</strong> {{ job.company }}
+        </div>
+        <div class="info-item">
+            <strong>Location:</strong> {{ job.location }}
+        </div>
+        <div class="info-item">
+            <strong>Job Board:</strong> {{ job.job_board }}
+        </div>
+        <div class="info-item">
+            <strong>Score:</strong> 
+            {% if job.score %}
+            <span class="score {{ 'high' if job.score >= 8.5 else 'medium' if job.score >= 7.0 else 'low' }}">
+                {{ "%.1f"|format(job.score) }}/10
+            </span>
+            {% else %}
+            N/A
+            {% endif %}
+        </div>
+        {% if job.salary_min and job.salary_max %}
+        <div class="info-item">
+            <strong>Salary Range:</strong> ${{ "{:,}".format(job.salary_min) }} - ${{ "{:,}".format(job.salary_max) }}
+        </div>
+        {% endif %}
+        <div class="info-item">
+            <strong>Scraped At:</strong> {{ job.scraped_at.strftime('%Y-%m-%d %H:%M') }}
+        </div>
+    </div>
+    
+    {% if job.description %}
+    <div class="job-section">
+        <h2>Description</h2>
+        <p>{{ job.description }}</p>
+    </div>
+    {% endif %}
+    
+    {% if job.requirements %}
+    <div class="job-section">
+        <h2>Requirements</h2>
+        <p>{{ job.requirements }}</p>
+    </div>
+    {% endif %}
+    
+    <div class="actions">
+        <a href="{{ job.job_url }}" target="_blank" class="btn btn-primary">View Original Job Posting</a>
+        <a href="/jobs" class="btn btn-secondary">Back to Jobs</a>
+    </div>
+    {% else %}
+    <h1>Job Not Found</h1>
+    <p>The job you're looking for doesn't exist.</p>
+    <a href="/jobs" class="btn btn-primary">Back to Jobs</a>
+    {% endif %}
+</div>
+{% endblock %}

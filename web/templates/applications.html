@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}My Applications - GetMeOutOfHere{% endblock %}
+
+{% block content %}
+<div class="applications-page">
+    <h1>My Applications</h1>
+    
+    {% if applications %}
+    <table class="jobs-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Score</th>
+                <th>Status</th>
+                <th>Applied Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.job_title }}</td>
+                <td>{{ app.company }}</td>
+                <td>{{ app.location }}</td>
+                <td>{{ "%.1f"|format(app.score) }}/10</td>
+                <td>
+                    <span class="status-badge {{ app.status }}">{{ app.status }}</span>
+                </td>
+                <td>{{ app.applied_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="{{ app.job_url }}" target="_blank" class="btn btn-small">View Job</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No applications yet. Start applying to jobs from the job listings page!</p>
+    {% endif %}
+</div>
+{% endblock %}

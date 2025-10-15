@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Job Listings - GetMeOutOfHere{% endblock %}
+
+{% block content %}
+<div class="jobs-page">
+    <h1>Job Listings</h1>
+    
+    {% if jobs %}
+    <table class="jobs-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Job Board</th>
+                <th>Score</th>
+                <th>Scraped</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job.job_title }}</td>
+                <td>{{ job.company }}</td>
+                <td>{{ job.location }}</td>
+                <td>{{ job.job_board }}</td>
+                <td>
+                    {% if job.score %}
+                    <span class="score {{ 'high' if job.score >= 8.5 else 'medium' if job.score >= 7.0 else 'low' }}">
+                        {{ "%.1f"|format(job.score) }}/10
+                    </span>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>{{ job.scraped_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="/jobs/{{ job.id }}" class="btn btn-small">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No jobs found. Start scraping to populate the job listings!</p>
+    {% endif %}
+</div>
+{% endblock %}

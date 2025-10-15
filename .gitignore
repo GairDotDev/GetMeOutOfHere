@@ -132,5 +132,15 @@ dmypy.json
 # Project specific
 config.yaml
 applied_jobs.json
-resumes/
-cover_letters/
+resumes/*.pdf
+resumes/*.docx
+cover_letters/*.pdf
+cover_letters/*.docx
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Static files (user uploads)
+web/static/uploads/
