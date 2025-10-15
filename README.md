@@ -64,17 +64,22 @@ This portfolio showcases my work as a backend developer, emphasizing Python/Fast
    ```
 
 5. **Run the application**:
-   ```bash
-   python main.py
-   ```
-   
-   Or with uvicorn directly:
-   ```bash
-   uvicorn main:app --reload --host 0.0.0.0 --port 8000
-   ```
+   - To start the **public site** (on port 8000):
+     ```bash
+     python run_public.py
+     ```
+     Or with uvicorn directly:
+     ```bash
+     uvicorn run_public:app --reload --host 0.0.0.0 --port 8000
+     ```
+   - To start the **admin backend** (on port 8001):
+     ```bash
+     python run_admin.py
+     ```
 
 6. **Open your browser**:
-   Navigate to `http://localhost:8000`
+   - Public site: `http://localhost:8000`
+   - Admin backend: `http://127.0.0.1:8001`
 
 ## Usage
 
