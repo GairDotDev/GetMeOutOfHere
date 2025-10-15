@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-sm p-8">
+    <div class="mb-6">
+        <a href="/blog" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            ← Back to Blog
+        </a>
+    </div>
+    
+    <article>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ post.title }}</h1>
+        <p class="text-sm text-gray-500 mb-6">{{ post.created_at }}</p>
+        
+        <div class="prose max-w-none">
+            {{ html_content | safe }}
+        </div>
+    </article>
+</div>
+
+<style>
+    /* Markdown prose styling */
+    .prose {
+        color: #374151;
+        max-width: 65ch;
+    }
+    .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+        font-weight: 700;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+        line-height: 1.25;
+    }
+    .prose h1 { font-size: 2.25em; }
+    .prose h2 { font-size: 1.5em; }
+    .prose h3 { font-size: 1.25em; }
+    .prose p {
+        margin-bottom: 1.25em;
+        line-height: 1.75;
+    }
+    .prose a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    .prose a:hover {
+        color: #1e40af;
+    }
+    .prose code {
+        background-color: #f3f4f6;
+        padding: 0.2em 0.4em;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+        font-family: monospace;
+    }
+    .prose pre {
+        background-color: #1f2937;
+        color: #f9fafb;
+        padding: 1em;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1.5em 0;
+    }
+    .prose pre code {
+        background-color: transparent;
+        padding: 0;
+        color: inherit;
+    }
+    .prose ul, .prose ol {
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+        padding-left: 1.625em;
+    }
+    .prose li {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+    .prose table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5em 0;
+    }
+    .prose th, .prose td {
+        border: 1px solid #e5e7eb;
+        padding: 0.5em 0.75em;
+    }
+    .prose th {
+        background-color: #f9fafb;
+        font-weight: 600;
+    }
+    .prose blockquote {
+        border-left: 4px solid #e5e7eb;
+        padding-left: 1em;
+        margin-left: 0;
+        font-style: italic;
+        color: #6b7280;
+    }
+</style>
+{% endblock %}
