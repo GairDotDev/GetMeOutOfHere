@@ -1,4 +1,4 @@
-# GetMeOutOfHere
+# Get Me Out Of Here
 
 An automated Python-based job searching tool that scrapes job postings, scores them using a weighted algorithm, and automatically applies if the score exceeds 8.5/10.
 
