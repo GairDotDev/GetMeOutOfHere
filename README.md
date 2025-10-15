@@ -58,8 +58,7 @@ This portfolio showcases my work as a backend developer, emphasizing Python/Fast
    cp .env.example .env
    ```
    
-   Edit `.env` and set your admin token:
-   ```
+   Edit `.env` and set your admin credentials (all are required for admin login):
    ADMIN_TOKEN=your-secret-admin-token-here
    ```
 
