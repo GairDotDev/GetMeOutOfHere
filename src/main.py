@@ -146,6 +146,8 @@ class JobApplicationBot:
                 print(f"\n[{idx}] {job.get('title')} at {job.get('company')}")
                 print(f"    Score: {score}/10 ⭐")
                 print(f"    Location: {job.get('location')}")
+                # lgtm[py/clear-text-logging-sensitive-data]
+                # Note: Salary is public job posting data, not user credentials
                 print(f"    Salary: ${job.get('salary_min', 0):,} - ${job.get('salary_max', 0):,}")
                 print(f"    URL: {job.get('url')}")
                 
