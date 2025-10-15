@@ -114,23 +114,29 @@ Blog posts are written in Markdown and stored in the `blog_posts/` directory:
 ```
 portfolio/
 ├── main.py                 # FastAPI application
+├── run_public.py           # Public-facing app runner
+├── run_admin.py            # Admin app runner
 ├── requirements.txt        # Python dependencies
 ├── .env.example           # Environment variables template
 ├── .gitignore            # Git ignore rules
 ├── README.md             # This file
 ├── templates/            # Jinja2 templates
-│   ├── base.html        # Base layout
-│   ├── home.html        # Home page
-│   ├── projects.html    # Projects page
-│   ├── project_item.html # Project card component
-│   ├── blog.html        # Blog listing
-│   └── blog_post.html   # Individual blog post
-├── blog_posts/          # Markdown blog posts
-│   └── welcome.md       # Sample blog post
-├── data/                # Data storage
-│   └── projects.json    # Projects (auto-created)
-└── static/              # Static files
-    └── css/            # Additional CSS (if needed)
+│   ├── base.html            # Base layout
+│   ├── home.html            # Home page
+│   ├── projects.html        # Projects page
+│   ├── project_item.html    # Project card component
+│   ├── blog.html            # Blog listing
+│   ├── blog_post.html       # Individual blog post
+│   ├── admin_login.html     # Admin login page
+│   ├── admin_dashboard.html # Admin dashboard
+│   └── contact.html         # Contact page
+├── blog_posts/              # Markdown blog posts
+│   └── welcome.md           # Sample blog post
+├── data/                    # Data storage
+│   ├── projects.json        # Projects (auto-created)
+│   └── contacts.json        # Contact form submissions
+└── static/                  # Static files
+    └── css/                 # Additional CSS (if needed)
 ```
 
 ## Future: SQLite Migration Path
