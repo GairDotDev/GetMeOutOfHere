@@ -4,12 +4,15 @@ from pathlib import Path
 from typing import Optional
 from datetime import datetime
 
-from fastapi import FastAPI, Request, Form, HTTPException, Header
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import FastAPI, Request, Form, HTTPException, Header, Cookie, Response
+from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import markdown
 from dotenv import load_dotenv
+import secrets
+import hashlib
+from datetime import timedelta
 
 # Load environment variables from .env file
 load_dotenv()
@@ -22,8 +25,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Setup Jinja2 templates
 templates = Jinja2Templates(directory="templates")
 
-# Admin token from environment
+# Admin credentials from environment
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "change-me-in-production")
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-me-in-production")
+
+# Session storage (in-memory, would use Redis in production)
+sessions = {}
+CSRF_TOKENS = {}
 
 # Data file paths
 DATA_DIR = Path("data")
@@ -72,6 +81,39 @@ def save_contacts(contacts):
         json.dump(contacts, f, indent=2)
 
 
+def create_session(username: str) -> str:
+    """Create a new session for the user."""
+    session_id = secrets.token_urlsafe(32)
+    sessions[session_id] = {
+        "username": username,
+        "created_at": datetime.now().isoformat()
+    }
+    return session_id
+
+
+def get_session(session_id: Optional[str]) -> Optional[dict]:
+    """Get session data by session ID."""
+    if not session_id:
+        return None
+    return sessions.get(session_id)
+
+
+def generate_csrf_token() -> str:
+    """Generate a CSRF token."""
+    token = secrets.token_urlsafe(32)
+    CSRF_TOKENS[token] = datetime.now()
+    return token
+
+
+def verify_csrf_token(token: str) -> bool:
+    """Verify CSRF token is valid."""
+    if token in CSRF_TOKENS:
+        # Token is valid, remove it (one-time use)
+        del CSRF_TOKENS[token]
+        return True
+    return False
+
+
 def verify_admin_token(authorization: Optional[str] = Header(None)):
     """Verify admin token from Authorization header."""
     if not authorization or not authorization.startswith("Bearer "):
@@ -106,6 +148,15 @@ def load_blog_posts():
     # Sort by creation time (newest first)
     posts.sort(key=lambda x: x["created_at"], reverse=True)
     return posts
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots_txt():
+    """Robots.txt to disallow admin crawling."""
+    return """User-agent: *
+Disallow: /admin/
+Disallow: /admin-login/
+Disallow: /admin-logout/"""
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -235,6 +286,143 @@ async def submit_contact(
     return HTMLResponse(content="", status_code=200)
 
 
+@app.get("/admin-login", response_class=HTMLResponse)
+async def admin_login_page(request: Request, session_id: Optional[str] = Cookie(None)):
+    """Admin login page."""
+    # Check if already logged in
+    session = get_session(session_id)
+    if session:
+        return RedirectResponse(url="/admin", status_code=302)
+    
+    csrf_token = generate_csrf_token()
+    return templates.TemplateResponse("admin_login.html", {
+        "request": request,
+        "title": "Admin Login",
+        "csrf_token": csrf_token
+    })
+
+
+@app.post("/admin-login", response_class=HTMLResponse)
+async def admin_login(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
+    csrf_token: str = Form(...)
+):
+    """Handle admin login."""
+    # Verify CSRF token
+    if not verify_csrf_token(csrf_token):
+        raise HTTPException(status_code=403, detail="Invalid CSRF token")
+    
+    # Verify credentials
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        # Create session
+        session_id = create_session(username)
+        
+        # Redirect to admin dashboard
+        response = RedirectResponse(url="/admin", status_code=302)
+        response.set_cookie(
+            key="session_id",
+            value=session_id,
+            httponly=True,
+            max_age=86400,  # 24 hours
+            samesite="strict"
+        )
+        return response
+    else:
+        # Invalid credentials
+        csrf_token = generate_csrf_token()
+        return templates.TemplateResponse("admin_login.html", {
+            "request": request,
+            "title": "Admin Login",
+            "csrf_token": csrf_token,
+            "error": "Invalid username or password"
+        })
+
+
+@app.get("/admin-logout")
+async def admin_logout(session_id: Optional[str] = Cookie(None)):
+    """Logout admin."""
+    if session_id and session_id in sessions:
+        del sessions[session_id]
+    
+    response = RedirectResponse(url="/admin-login", status_code=302)
+    response.delete_cookie("session_id")
+    return response
+
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_dashboard(request: Request, session_id: Optional[str] = Cookie(None)):
+    """Admin dashboard."""
+    # Verify session
+    session = get_session(session_id)
+    if not session:
+        return RedirectResponse(url="/admin-login", status_code=302)
+    
+    # Load data
+    projects = load_projects()
+    contacts = load_contacts()
+    
+    csrf_token = generate_csrf_token()
+    
+    return templates.TemplateResponse("admin_dashboard.html", {
+        "request": request,
+        "title": "Admin Dashboard",
+        "projects": projects,
+        "contacts": contacts,
+        "csrf_token": csrf_token,
+        "username": session["username"]
+    })
+
+
+@app.post("/admin/delete-project/{project_id}")
+async def admin_delete_project(
+    project_id: int,
+    csrf_token: str = Form(...),
+    session_id: Optional[str] = Cookie(None)
+):
+    """Delete a project (admin only)."""
+    # Verify session
+    session = get_session(session_id)
+    if not session:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    # Verify CSRF token
+    if not verify_csrf_token(csrf_token):
+        raise HTTPException(status_code=403, detail="Invalid CSRF token")
+    
+    # Delete project
+    projects = load_projects()
+    projects = [p for p in projects if p["id"] != project_id]
+    save_projects(projects)
+    
+    return RedirectResponse(url="/admin", status_code=302)
+
+
+@app.post("/admin/delete-contact/{contact_id}")
+async def admin_delete_contact(
+    contact_id: int,
+    csrf_token: str = Form(...),
+    session_id: Optional[str] = Cookie(None)
+):
+    """Delete a contact (admin only)."""
+    # Verify session
+    session = get_session(session_id)
+    if not session:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    # Verify CSRF token
+    if not verify_csrf_token(csrf_token):
+        raise HTTPException(status_code=403, detail="Invalid CSRF token")
+    
+    # Delete contact
+    contacts = load_contacts()
+    contacts = [c for c in contacts if c["id"] != contact_id]
+    save_contacts(contacts)
+    
+    return RedirectResponse(url="/admin", status_code=302)
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
