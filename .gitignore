@@ -39,6 +39,7 @@ Thumbs.db
 
 # Project specific
 data/projects.json
+data/contacts.json
 *.log
 
 # Environment variables
