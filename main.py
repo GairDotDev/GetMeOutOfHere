@@ -155,8 +155,8 @@ async def robots_txt():
     """Robots.txt to disallow admin crawling."""
     return """User-agent: *
 Disallow: /admin/
-Disallow: /admin-login/
-Disallow: /admin-logout/"""
+Disallow: /admin-login
+Disallow: /admin-logout"""
 
 
 @app.get("/", response_class=HTMLResponse)
