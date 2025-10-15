@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="space-y-8">
+    <!-- Hero Section -->
+    <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Hi, I'm Tom Gair</h1>
+        <p class="text-xl text-gray-600 mb-6">
+            Backend Developer | Python Enthusiast | SQL Learner
+        </p>
+        <div class="prose max-w-none">
+            <p class="text-gray-700">
+                Welcome to my portfolio! I specialize in building robust backend systems with 
+                <strong>Python</strong> and <strong>FastAPI</strong>. I'm passionate about creating 
+                efficient, scalable web applications and am actively growing my skills in 
+                <strong>SQL</strong> and database design.
+            </p>
+        </div>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="bg-white rounded-lg shadow-sm p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Skills & Technologies</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-lg mb-2">Backend Development</h3>
+                <ul class="text-gray-600 space-y-1">
+                    <li>• Python</li>
+                    <li>• FastAPI</li>
+                    <li>• REST APIs</li>
+                </ul>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-lg mb-2">Database</h3>
+                <ul class="text-gray-600 space-y-1">
+                    <li>• SQL (Learning)</li>
+                    <li>• SQLite</li>
+                    <li>• Database Design</li>
+                </ul>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-lg mb-2">Frontend</h3>
+                <ul class="text-gray-600 space-y-1">
+                    <li>• HTMX</li>
+                    <li>• Jinja2 Templates</li>
+                    <li>• Tailwind CSS</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="bg-white rounded-lg shadow-sm p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+        <p class="text-gray-700 mb-4">
+            I'm always interested in new opportunities and collaborations. Feel free to reach out!
+        </p>
+        <div class="flex flex-col space-y-2">
+            <a href="mailto:tom@gair.dev" class="text-blue-600 hover:text-blue-800 font-medium">
+                📧 tom@gair.dev
+            </a>
+            <a href="https://gair.dev" class="text-blue-600 hover:text-blue-800 font-medium" target="_blank">
+                🌐 gair.dev
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
