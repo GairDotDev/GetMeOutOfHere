@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
+    <a href="/projects" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 text-sm font-medium">← Back to Projects</a>
+    <h1 class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{{ project.title }}</h1>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">{{ project.summary }}</p>
+    
+    {% if project.tags %}
+    <div class="mt-3 flex flex-wrap gap-2" aria-label="Badges">
+        {% for badge in project.badges %}
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">{{ badge }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="mt-6 space-y-6 prose dark:prose-invert max-w-none">
+        {% if project.details.problem %}
+        <section>
+            <h2>Problem</h2>
+            <p>{{ project.details.problem }}</p>
+        </section>
+        {% endif %}
+
+        {% if project.details.constraints %}
+        <section>
+            <h2>Constraints</h2>
+            <p>{{ project.details.constraints }}</p>
+        </section>
+        {% endif %}
+
+        {% if project.details.approach %}
+        <section>
+            <h2>Approach</h2>
+            <p>{{ project.details.approach }}</p>
+        </section>
+        {% endif %}
+
+        {% if project.details.architecture %}
+        <section>
+            <h2>Architecture</h2>
+            <pre><code>{{ project.details.architecture }}</code></pre>
+        </section>
+        {% endif %}
+
+        {% if project.details.endpoints %}
+        <section>
+            <h2>Key Endpoints/Snippets</h2>
+            <ul>
+            {% for ep in project.details.endpoints %}
+                <li><code>{{ ep.method }} {{ ep.path }}</code> — {{ ep.desc }}</li>
+            {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        {% if project.details.challenges %}
+        <section>
+            <h2>Challenges</h2>
+            <p>{{ project.details.challenges }}</p>
+        </section>
+        {% endif %}
+
+        {% if project.details.result_next %}
+        <section>
+            <h2>Result / Next Steps</h2>
+            <p>{{ project.details.result_next }}</p>
+        </section>
+        {% endif %}
+    </div>
+
+    <div class="mt-6 flex flex-wrap gap-4">
+        {% if project.links.site %}
+        <a href="{{ project.links.site }}" target="_blank" rel="noopener" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300">Live Site</a>
+        {% endif %}
+        {% if project.links.repo %}
+        <a href="{{ project.links.repo }}" target="_blank" rel="noopener" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300">Repository</a>
+        {% endif %}
+        {% if project.links.demo %}
+        <a href="{{ project.links.demo }}" target="_blank" rel="noopener" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300">Demo</a>
+        {% endif %}
+        {% if project.slug == 'portfolio' %}
+        <a href="/health" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">API Health</a>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}
+

@@ -1,68 +1,129 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="space-y-8">
-    <!-- Hero Section -->
-    <div class="bg-white rounded-lg shadow-sm p-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Hi, I'm Tom Gair</h1>
-        <p class="text-xl text-gray-600 mb-6">
-            Backend Developer | Python Enthusiast | SQL Learner
-        </p>
-        <div class="prose max-w-none">
-            <p class="text-gray-700">
-                Welcome to my portfolio! I specialize in building robust backend systems with 
-                <strong>Python</strong> and <strong>FastAPI</strong>. I'm passionate about creating 
-                efficient, scalable web applications and am actively growing my skills in 
-                <strong>SQL</strong> and database design.
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-16 pb-32">
+    <!-- Background gradient -->
+    <div class="absolute inset-0 gradient-bg-hero-light"></div>
+    
+    <!-- Content -->
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <!-- Visit counter badge -->
+            <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 text-sm font-medium mb-6">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+                {{ visit_count }} visitors and counting
+            </div>
+            
+            <!-- Badge -->
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-neon-100 dark:bg-neon-900/30 text-neon-800 dark:text-neon-200 text-sm font-medium mb-6">
+                Open to Employment, Freelance, and Collaboration
+            </div>
+
+            <!-- Main heading -->
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6">
+                I build reliable software<br/>
+                <span class="gradient-text-primary-neon-extended">
+                    and simple systems.
+                </span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+                FastAPI, Python, and AI-assisted tools for clean, practical development.
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/projects" class="group inline-flex items-center px-8 py-4 rounded-xl btn-primary text-white font-semibold shadow-lg hover:shadow-xl">
+                    <svg class="w-5 h-5 mr-2 icon-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                    View Projects
+                </a>
+                <a href="/contact" class="group inline-flex items-center px-8 py-4 rounded-xl border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold hover:border-neon-500 hover:text-neon-600 dark:hover:text-neon-400 hover-scale">
+                    <svg class="w-5 h-5 mr-2 icon-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Contact
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 scroll-animate">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                About Me
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-4">
+                I'm Tom Gair — a self-taught Python developer who builds small, practical tools and automation systems.
+            </p>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                I focus on FastAPI backends, data handling, and ethical, privacy-aware design.
             </p>
         </div>
-    </div>
-
-    <!-- Skills Section -->
-    <div class="bg-white rounded-lg shadow-sm p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Skills & Technologies</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="border border-gray-200 rounded-lg p-4">
-                <h3 class="font-semibold text-lg mb-2">Backend Development</h3>
-                <ul class="text-gray-600 space-y-1">
-                    <li>• Python</li>
-                    <li>• FastAPI</li>
-                    <li>• REST APIs</li>
-                </ul>
+        
+        <div class="text-center mb-16 scroll-animate">
+            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-8">
+                Skills & Technologies
+            </h3>
+        </div>
+        
+        <!-- Skill Cards -->
+        <div class="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">Python</span>
             </div>
-            <div class="border border-gray-200 rounded-lg p-4">
-                <h3 class="font-semibold text-lg mb-2">Database</h3>
-                <ul class="text-gray-600 space-y-1">
-                    <li>• SQL (Learning)</li>
-                    <li>• SQLite</li>
-                    <li>• Database Design</li>
-                </ul>
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">FastAPI</span>
             </div>
-            <div class="border border-gray-200 rounded-lg p-4">
-                <h3 class="font-semibold text-lg mb-2">Frontend</h3>
-                <ul class="text-gray-600 space-y-1">
-                    <li>• HTMX</li>
-                    <li>• Jinja2 Templates</li>
-                    <li>• Tailwind CSS</li>
-                </ul>
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">SQLite</span>
+            </div>
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">HTMX/Jinja</span>
+            </div>
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">Docker</span>
+            </div>
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">GitHub</span>
+            </div>
+            <div class="card-hover bg-gray-50 dark:bg-gray-700 rounded-xl px-6 py-4 text-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">AI-assisted Dev</span>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Contact Section -->
-    <div class="bg-white rounded-lg shadow-sm p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Get In Touch</h2>
-        <p class="text-gray-700 mb-4">
-            I'm always interested in new opportunities and collaborations. Feel free to reach out!
-        </p>
-        <div class="flex flex-col space-y-2">
-            <a href="mailto:tom@gair.dev" class="text-blue-600 hover:text-blue-800 font-medium">
-                📧 tom@gair.dev
-            </a>
-            <a href="https://gair.dev" class="text-blue-600 hover:text-blue-800 font-medium" target="_blank" rel="noopener noreferrer">
-                🌐 gair.dev
+
+<!-- Projects Section -->
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                Featured Projects
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+                Recent work showcasing clean code and practical solutions.
+            </p>
+        </div>
+        
+        <div class="text-center">
+            <a href="/projects" class="inline-flex items-center px-8 py-4 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold hover-scale border border-gray-200 dark:border-gray-700 shadow-sm">
+                View All Projects
+                <svg class="w-5 h-5 ml-2 icon-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
             </a>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -8,6 +8,9 @@
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="bg-gray-50">
@@ -34,22 +37,153 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Projects</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ projects|length }}</p>
+                <p class="text-3xl font-bold text-neon-600">{{ projects|length }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Blog Posts</h3>
+                <p class="text-3xl font-bold text-primary-600">{{ blog_posts|length if blog_posts else 0 }}</p>
             </div>
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Contacts</h3>
-                <p class="text-3xl font-bold text-green-600">{{ contacts|length }}</p>
+                <p class="text-3xl font-bold text-emerald-600">{{ contacts|length }}</p>
             </div>
         </div>
 
         <!-- Projects Section -->
         <div class="bg-white rounded-lg shadow mb-8">
-            <div class="px-6 py-4 border-b border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-xl font-bold text-gray-900">Projects</h2>
+                <button 
+                    onclick="adminFormManager.toggleCreateProjectForm()" 
+                    class="bg-neon-600 hover:bg-neon-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                >
+                    + New Project
+                </button>
             </div>
+            
+            <!-- Create New Project Form (hidden by default) -->
+            <div id="create-project-form" class="hidden border-b border-gray-200 p-6 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Project</h3>
+                <form 
+                    method="POST" 
+                    action="/admin/projects/create" 
+                    class="space-y-4"
+                >
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="project-title" class="block text-sm font-medium text-gray-700 mb-1">Project Title *</label>
+                            <input 
+                                type="text" 
+                                id="project-title" 
+                                name="title" 
+                                required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="My Awesome Project"
+                            >
+                        </div>
+                        <div>
+                            <label for="project-slug" class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+                            <input 
+                                type="text" 
+                                id="project-slug" 
+                                name="slug"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="auto-generated from title"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">Leave blank to auto-generate from title</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="project-summary" class="block text-sm font-medium text-gray-700 mb-1">Summary *</label>
+                        <textarea 
+                            id="project-summary" 
+                            name="summary" 
+                            required
+                            rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                            placeholder="Brief description of the project..."
+                        ></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="project-tags" class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                        <input 
+                            type="text" 
+                            id="project-tags" 
+                            name="tags"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                            placeholder="react, typescript, web (comma-separated)"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="project-stack" class="block text-sm font-medium text-gray-700 mb-1">Tech Stack</label>
+                        <input 
+                            type="text" 
+                            id="project-stack" 
+                            name="stack"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                            placeholder="Python, FastAPI, PostgreSQL (comma-separated)"
+                        >
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="project-repo" class="block text-sm font-medium text-gray-700 mb-1">Repository URL</label>
+                            <input 
+                                type="url" 
+                                id="project-repo" 
+                                name="repo_url"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="https://github.com/username/project"
+                            >
+                        </div>
+                        <div>
+                            <label for="project-demo" class="block text-sm font-medium text-gray-700 mb-1">Demo URL</label>
+                            <input 
+                                type="url" 
+                                id="project-demo" 
+                                name="demo_url"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="https://myproject.com"
+                            >
+                        </div>
+                        <div>
+                            <label for="project-site" class="block text-sm font-medium text-gray-700 mb-1">Live Site URL</label>
+                            <input 
+                                type="url" 
+                                id="project-site" 
+                                name="site_url"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="https://site.com"
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button 
+                            type="button" 
+                            onclick="adminFormManager.toggleCreateProjectForm()" 
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit"
+                            class="px-4 py-2 bg-neon-600 text-white rounded-md hover:bg-neon-700"
+                        >
+                            Create Project
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             <div class="p-6">
                 {% if projects %}
                 <div class="overflow-x-auto">
@@ -68,11 +202,15 @@
                             {% for project in projects %}
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ project.id }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ project.name }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ project.description[:50] }}{% if project.description|length > 50 %}...{% endif %}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ project.title or project.name }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">
+                                    {% set desc = project.summary or project.description %}
+                                    {{ desc[:50] if desc else '' }}{% if desc and desc|length > 50 %}...{% endif %}
+                                </td>
                                 <td class="px-6 py-4 text-sm">
-                                    {% if project.url %}
-                                    <a href="{{ project.url }}" target="_blank" class="text-blue-600 hover:text-blue-800">Link</a>
+                                    {% set link = (project.links.repo if project.links and project.links.repo else (project.links.demo if project.links and project.links.demo else project.url)) %}
+                                    {% if link %}
+                                    <a href="{{ link }}" target="_blank" class="text-neon-600 hover:text-neon-800">Link</a>
                                     {% else %}
                                     <span class="text-gray-400">-</span>
                                     {% endif %}
@@ -97,6 +235,175 @@
             </div>
         </div>
 
+        <!-- Blog Posts Section -->
+        <div class="bg-white rounded-lg shadow mb-8">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-900">Blog Posts</h2>
+                <button 
+                    onclick="adminFormManager.toggleCreateBlogForm()" 
+                    class="bg-neon-600 hover:bg-neon-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                >
+                    + New Post
+                </button>
+            </div>
+            
+            <!-- Create New Blog Post Form (hidden by default) -->
+            <div id="create-blog-form" class="hidden border-b border-gray-200 p-6 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Blog Post</h3>
+                <form 
+                    method="POST" 
+                    action="/admin/blog/create" 
+                    class="space-y-4"
+                >
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                            <input 
+                                type="text" 
+                                id="title" 
+                                name="title" 
+                                required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="Your blog post title"
+                            >
+                        </div>
+                        <div>
+                            <label for="slug" class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+                            <input 
+                                type="text" 
+                                id="slug" 
+                                name="slug"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                                placeholder="auto-generated from title"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">Leave blank to auto-generate from title</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="summary" class="block text-sm font-medium text-gray-700 mb-1">Summary</label>
+                        <input 
+                            type="text" 
+                            id="summary" 
+                            name="summary"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                            placeholder="Brief summary for blog listing page"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="tags" class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                        <input 
+                            type="text" 
+                            id="tags" 
+                            name="tags"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500"
+                            placeholder="python, fastapi, web development (comma-separated)"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content (Markdown) *</label>
+                        <textarea 
+                            id="content" 
+                            name="content" 
+                            required
+                            rows="12"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-neon-500 focus:border-neon-500 font-mono text-sm"
+                            placeholder="Write your blog post content in Markdown..."
+                        ></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Supports Markdown syntax including code blocks, tables, etc.</p>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button 
+                            type="button" 
+                            onclick="adminFormManager.toggleCreateBlogForm()" 
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit"
+                            class="px-4 py-2 bg-neon-600 text-white rounded-md hover:bg-neon-700"
+                        >
+                            Create Post
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="p-6">
+                {% if blog_posts %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tags</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for post in blog_posts %}
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">
+                                    <div>
+                                        <div class="font-medium">{{ post.title }}</div>
+                                        {% if post.summary %}
+                                        <div class="text-gray-500 text-xs mt-1">{{ post.summary[:60] }}{% if post.summary|length > 60 %}...{% endif %}</div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <code class="bg-gray-100 px-2 py-1 rounded text-xs">{{ post.slug }}</code>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ post.date }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    {% if post.tags %}
+                                        {% for tag in post.tags %}
+                                        <span class="inline-block bg-neon-100 text-neon-800 text-xs px-2 py-1 rounded mr-1 mb-1">{{ tag }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-gray-400">-</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-3">
+                                    <a href="/blog/{{ post.slug }}" target="_blank" class="text-neon-600 hover:text-neon-800">View</a>
+                                    <form method="POST" action="/admin/blog/delete/{{ post.slug }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this blog post?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">No blog posts</h3>
+                    <p class="mt-1 text-sm text-gray-500">Get started by creating your first blog post.</p>
+                    <div class="mt-6">
+                        <button 
+                            onclick="adminFormManager.toggleCreateBlogForm()" 
+                            class="bg-neon-600 hover:bg-neon-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                        >
+                            + Create your first post
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
         <!-- Contacts Section -->
         <div class="bg-white rounded-lg shadow">
             <div class="px-6 py-4 border-b border-gray-200">
@@ -113,7 +420,7 @@
                                 <p class="text-sm text-gray-600">{{ contact.email }}</p>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neon-100 text-neon-800">
                                     {{ contact.inquiry_type }}
                                 </span>
                                 <form method="POST" action="/admin/delete-contact/{{ contact.id }}" onsubmit="return confirm('Are you sure you want to delete this contact?');">
@@ -136,5 +443,8 @@
             </div>
         </div>
     </main>
+
+    <!-- Custom JavaScript -->
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
